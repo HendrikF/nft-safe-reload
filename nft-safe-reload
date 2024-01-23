@@ -3,11 +3,17 @@
 # Reload nftables configuration and wait for user confirmation.
 # After a timeout the previous configuration is restored.
 # Original Author: https://sanjuroe.dev/nft-safe-reload
-# This version containes proper shell quoting.
+# This version containes proper shell quoting and restores
+# the old configuration when interrupted.
 
 save_file="$(mktemp)"
+restore=1
 
 cleanup() {
+        if [ "$restore" = "1" ]; then
+               restore
+               echo "Restored old configuration"
+        fi
         rm -f "$save_file"
 }
 
@@ -47,11 +53,14 @@ save
 if apply; then
         echo -n "Do you want to accept the new firewall configuration? [y/n] "
         if read_yesno_with_timeout; then
+                restore=0
                 echo "Accepted new configuration"
+                exit 0
         else
-                restore
-                echo "Restored old configuration"
-                exit 2
+                exit 1
         fi
+else
+        echo "There was an error applying the new configuration"
+        exit 2
 fi
 

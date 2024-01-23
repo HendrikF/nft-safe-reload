@@ -6,7 +6,8 @@ This should help prevent admins from locking themselves out of a system.
 
 Original Author: https://sanjuroe.dev/nft-safe-reload
 
-This version contains proper shell quoting.
+This version contains proper shell quoting and restores
+the old configuration when interrupted.
 
 ## The new nftables configuration has to be confirmed
 
