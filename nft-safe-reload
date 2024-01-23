@@ -23,7 +23,7 @@ RULES="/etc/nftables.conf"
 TIMEOUT=30
 
 read_yesno_with_timeout() {
-        read -t "$TIMEOUT" yn 2> /dev/null
+        IFS= read -r -t "$TIMEOUT" yn 2> /dev/null
 
         case "$yn" in
                 y|Y)
